@@ -1,25 +1,47 @@
 import React, { Component } from "react";
-import { Text, View } from "react-native";
-
+import { Text, View, TextInput, TouchableOpacity } from "react-native";
+import styles from "./styles";
+import api from "../../services/api";
 export class Register extends Component {
   state = {
     email: "",
     password: "",
   };
 
-  navigateToRegister() {
-    this.props.navigation.navigate("Register");
+  navigateToLogin() {
+    this.props.navigation.navigate("Logon");
   }
 
-  login() {
-    const { email, password } = this.state;
-    console.log(email, password);
+  async handleRegister() {
+    const data = this.state;
+
+    try {
+      await api.post("/user", data);
+      alert(`Usuario cadastrado com sucesso!`);
+      this.props.navigation.navigate("Logon");
+    } catch (err) {
+      alert("Erro no cadastro, tente novamente");
+    }
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.logo}>Seja o heroi!</Text>
+        <Text style={styles.logo}>Registre-se!</Text>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.inputText}
+            placeholder="Nome"
+            placeholderTextColor="#333"
+          />
+        </View>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.inputText}
+            placeholder="CPF"
+            placeholderTextColor="#333"
+          />
+        </View>
         <View style={styles.inputView}>
           <TextInput
             style={styles.inputText}
@@ -37,11 +59,14 @@ export class Register extends Component {
             onChangeText={(text) => this.setState({ password: text })}
           />
         </View>
-        <TouchableOpacity style={styles.loginBtn} onPress={() => this.login()}>
-          <Text style={styles.loginText}>LOGIN</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.navigateToRegister()}>
+        <TouchableOpacity
+          style={styles.loginBtn}
+          onPress={() => this.handleRegister()}
+        >
           <Text style={styles.loginText}>Registre-se</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.navigateToLogin()}>
+          <Text style={styles.loginText}>Ir para login</Text>
         </TouchableOpacity>
       </View>
     );

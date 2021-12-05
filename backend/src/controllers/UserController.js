@@ -3,6 +3,7 @@ const connection = require("../database/connection");
 
 module.exports = {
   async create(request, response) {
+    console.log("koe");
     const { email, password } = request.body;
 
     const id = generateUniqueId();
